@@ -2,41 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Hogar Autónomo™ Design System - Supervivencia Doméstica Gamificada
+Todas las colores DEBEN ser HSL.
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Paleta Principal - Hogar Autónomo™ */
+    --primary: 140 45% 20%;        /* Verde escuro #2E7D32 */
+    --primary-foreground: 140 40% 96%;
+    --primary-glow: 140 50% 35%;   /* Verde más brillante para efectos */
+    
+    --secondary: 184 100% 20%;     /* Azul petróleo #006064 */
+    --secondary-foreground: 184 20% 95%;
+    --secondary-glow: 184 100% 30%;
+    
+    --background: 84 40% 97%;      /* Branco gelo #F1F8E9 */
+    --foreground: 140 20% 15%;     /* Texto oscuro natural */
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Elementos de Interface */
+    --card: 84 30% 98%;
+    --card-foreground: 140 20% 15%;
+    
+    --muted: 84 20% 92%;
+    --muted-foreground: 140 15% 45%;
+    
+    --accent: 45 90% 55%;          /* Amarelo para alertas/energia */
+    --accent-foreground: 45 20% 10%;
+    
+    --destructive: 0 70% 55%;      /* Rojo para peligros */
+    --destructive-foreground: 0 20% 95%;
+    
+    --border: 84 20% 88%;
+    --input: 84 25% 94%;
+    --ring: 140 45% 20%;
+    
+    /* Gamificação */
+    --success: 120 60% 40%;        /* Verde éxito */
+    --success-foreground: 120 30% 95%;
+    
+    --warning: 35 85% 50%;         /* Naranja advertencia */
+    --warning-foreground: 35 20% 10%;
+    
+    --info: 200 80% 45%;           /* Azul información */
+    --info-foreground: 200 20% 95%;
+    
+    /* Gradientes Ambientales */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--secondary-glow)));
+    --gradient-survival: linear-gradient(180deg, hsl(var(--background)), hsl(var(--muted)));
+    --gradient-progress: linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)));
+    
+    /* Sombras Gamificadas */
+    --shadow-survival: 0 8px 25px -8px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 30px hsl(var(--primary-glow) / 0.4);
+    --shadow-card: 0 4px 20px -4px hsl(var(--foreground) / 0.1);
+    
+    /* Animaciones */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +126,95 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans antialiased;
   }
+
+  /* Hogar Autónomo™ Component Classes */
+  .survival-gradient {
+    background: var(--gradient-survival);
+  }
+  
+  .primary-gradient {
+    background: var(--gradient-primary);
+  }
+  
+  .secondary-gradient {
+    background: var(--gradient-secondary);
+  }
+  
+  .progress-gradient {
+    background: var(--gradient-progress);
+  }
+  
+  .survival-shadow {
+    box-shadow: var(--shadow-survival);
+  }
+  
+  .glow-effect {
+    box-shadow: var(--shadow-glow);
+  }
+  
+  .smooth-transition {
+    transition: var(--transition-smooth);
+  }
+  
+  .bounce-transition {
+    transition: var(--transition-bounce);
+  }
+}
+
+@layer components {
+  /* Animaciones Gamificadas */
+  .progress-pulse {
+    animation: progress-pulse 2s ease-in-out infinite;
+  }
+  
+  .badge-bounce {
+    animation: badge-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+  
+  .level-up {
+    animation: level-up 0.8s ease-out;
+  }
+  
+  .survival-card {
+    @apply bg-card border border-border rounded-lg p-6 survival-shadow smooth-transition;
+  }
+  
+  .survival-card:hover {
+    @apply glow-effect transform-gpu scale-[1.02];
+  }
+  
+  .progress-bar {
+    @apply h-3 rounded-full progress-gradient relative overflow-hidden;
+  }
+  
+  .progress-bar::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent;
+    animation: shimmer 2s infinite;
+  }
+}
+
+@keyframes progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes badge-bounce {
+  0% { transform: scale(0) rotate(-180deg); }
+  50% { transform: scale(1.1) rotate(-90deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes level-up {
+  0% { transform: scale(1) translateY(0); }
+  30% { transform: scale(1.1) translateY(-10px); }
+  70% { transform: scale(1.05) translateY(-5px); }
+  100% { transform: scale(1) translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
