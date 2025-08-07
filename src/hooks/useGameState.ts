@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
 
+export interface ModuleAnswers {
+  [moduleId: number]: {
+    [questionId: number]: number; // pontos da resposta
+  };
+}
+
 export interface GameState {
   currentStep: number;
   totalSteps: number;
@@ -23,6 +29,8 @@ export interface GameState {
     emergency: boolean;
   };
   completedSteps: number[];
+  moduleAnswers: ModuleAnswers;
+  currentModule: number | null;
 }
 
 const initialState: GameState = {
@@ -37,7 +45,9 @@ const initialState: GameState = {
   waterData: { liters: 0, days: 0 },
   foodData: { days: 0, refrigeration: false },
   energyData: { flashlight: false, powerbank: false, emergency: false },
-  completedSteps: []
+  completedSteps: [],
+  moduleAnswers: {},
+  currentModule: null
 };
 
 export const useGameState = () => {
@@ -103,6 +113,50 @@ export const useGameState = () => {
     return (gameState.completedSteps.length / gameState.totalSteps) * 100;
   };
 
+  const startModule = (moduleId: number) => {
+    setGameState(prev => ({ ...prev, currentModule: moduleId }));
+  };
+
+  const saveAnswer = (moduleId: number, questionId: number, points: number) => {
+    setGameState(prev => ({
+      ...prev,
+      moduleAnswers: {
+        ...prev.moduleAnswers,
+        [moduleId]: {
+          ...prev.moduleAnswers[moduleId],
+          [questionId]: points
+        }
+      }
+    }));
+  };
+
+  const completeModule = (moduleId: number) => {
+    const moduleAnswers = gameState.moduleAnswers[moduleId] || {};
+    const totalPoints = Object.values(moduleAnswers).reduce((sum, points) => sum + points, 0);
+    
+    setGameState(prev => ({
+      ...prev,
+      completedSteps: [...prev.completedSteps, moduleId],
+      currentStep: Math.max(prev.currentStep, moduleId + 1),
+      puntosPreparacion: prev.puntosPreparacion + totalPoints,
+      currentModule: null
+    }));
+  };
+
+  const getModuleScore = (moduleId: number) => {
+    const answers = gameState.moduleAnswers[moduleId] || {};
+    return Object.values(answers).reduce((sum, points) => sum + points, 0);
+  };
+
+  const isModuleAvailable = (moduleId: number) => {
+    if (moduleId === 1) return true; // Primeiro módulo sempre disponível
+    return gameState.completedSteps.includes(moduleId - 1);
+  };
+
+  const isModuleCompleted = (moduleId: number) => {
+    return gameState.completedSteps.includes(moduleId);
+  };
+
   return {
     gameState,
     updateGameState,
@@ -111,6 +165,12 @@ export const useGameState = () => {
     completeStep,
     calculateLevel,
     getLevelName,
-    getProgressPercentage
+    getProgressPercentage,
+    startModule,
+    saveAnswer,
+    completeModule,
+    getModuleScore,
+    isModuleAvailable,
+    isModuleCompleted
   };
 };

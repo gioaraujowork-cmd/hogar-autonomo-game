@@ -4,6 +4,10 @@ import { GameCard } from "./GameCard";
 import { Badge } from "./Badge";
 import { ProgressBar } from "./ProgressBar";
 import { useGameState } from "@/hooks/useGameState";
+import { WaterModule } from "./WaterModule";
+import { FoodModule } from "./FoodModule";
+import { EnergyModule } from "./EnergyModule";
+import { SavingsModule } from "./SavingsModule";
 import { 
   Droplets, 
   Utensils, 
@@ -26,7 +30,7 @@ interface MainDashboardProps {
 }
 
 export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
-  const { gameState, completeStep, getLevelName, getProgressPercentage } = useGameState();
+  const { gameState, completeStep, getLevelName, getProgressPercentage, isModuleAvailable, isModuleCompleted } = useGameState();
   const [selectedModule, setSelectedModule] = useState<number | null>(null);
   const [showUpgrade, setShowUpgrade] = useState(false);
 
@@ -38,8 +42,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <AlertTriangle className="w-8 h-8" />,
       points: 100,
       estimatedTime: "3 min",
-      status: gameState.completedSteps.includes(1) ? 'completed' : 
-              gameState.currentStep >= 1 ? 'available' : 'locked',
+      status: isModuleCompleted(1) ? 'completed' : 
+              isModuleAvailable(1) ? 'available' : 'locked',
       color: 'destructive' as const,
       bgGradient: 'from-destructive/10 to-destructive/5'
     },
@@ -50,8 +54,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Droplets className="w-8 h-8" />,
       points: 150,
       estimatedTime: "4 min",
-      status: gameState.completedSteps.includes(2) ? 'completed' : 
-              gameState.currentStep >= 2 ? 'available' : 'locked',
+      status: isModuleCompleted(2) ? 'completed' : 
+              isModuleAvailable(2) ? 'available' : 'locked',
       color: 'info' as const,
       bgGradient: 'from-info/10 to-info/5'
     },
@@ -62,8 +66,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Utensils className="w-8 h-8" />,
       points: 150,
       estimatedTime: "5 min",
-      status: gameState.completedSteps.includes(3) ? 'completed' : 
-              gameState.currentStep >= 3 ? 'available' : 'locked',
+      status: isModuleCompleted(3) ? 'completed' : 
+              isModuleAvailable(3) ? 'available' : 'locked',
       color: 'warning' as const,
       bgGradient: 'from-warning/10 to-warning/5'
     },
@@ -74,8 +78,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Zap className="w-8 h-8" />,
       points: 150,
       estimatedTime: "4 min",
-      status: gameState.completedSteps.includes(4) ? 'completed' : 
-              gameState.currentStep >= 4 ? 'available' : 'locked',
+      status: isModuleCompleted(4) ? 'completed' : 
+              isModuleAvailable(4) ? 'available' : 'locked',
       color: 'accent' as const,
       bgGradient: 'from-accent/10 to-accent/5'
     },
@@ -86,8 +90,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Thermometer className="w-8 h-8" />,
       points: 120,
       estimatedTime: "3 min",
-      status: gameState.completedSteps.includes(5) ? 'completed' : 
-              gameState.currentStep >= 5 ? 'available' : 'locked',
+      status: isModuleCompleted(5) ? 'completed' : 
+              isModuleAvailable(5) ? 'available' : 'locked',
       color: 'secondary' as const,
       bgGradient: 'from-secondary/10 to-secondary/5'
     },
@@ -98,8 +102,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Target className="w-8 h-8" />,
       points: 200,
       estimatedTime: "6 min",
-      status: gameState.completedSteps.includes(6) ? 'completed' : 
-              gameState.currentStep >= 6 ? 'available' : 'locked',
+      status: isModuleCompleted(6) ? 'completed' : 
+              isModuleAvailable(6) ? 'available' : 'locked',
       color: 'success' as const,
       bgGradient: 'from-success/10 to-success/5'
     },
@@ -110,8 +114,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <ShoppingCart className="w-8 h-8" />,
       points: 150,
       estimatedTime: "5 min",
-      status: gameState.completedSteps.includes(7) ? 'completed' : 
-              gameState.currentStep >= 7 ? 'available' : 'locked',
+      status: isModuleCompleted(7) ? 'completed' : 
+              isModuleAvailable(7) ? 'available' : 'locked',
       color: 'primary' as const,
       bgGradient: 'from-primary/10 to-primary/5'
     },
@@ -122,8 +126,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <AlertTriangle className="w-8 h-8" />,
       points: 250,
       estimatedTime: "8 min",
-      status: gameState.completedSteps.includes(8) ? 'completed' : 
-              gameState.currentStep >= 8 ? 'available' : 'locked',
+      status: isModuleCompleted(8) ? 'completed' : 
+              isModuleAvailable(8) ? 'available' : 'locked',
       color: 'destructive' as const,
       bgGradient: 'from-destructive/10 to-destructive/5'
     },
@@ -134,8 +138,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Trophy className="w-8 h-8" />,
       points: 200,
       estimatedTime: "10 min",
-      status: gameState.completedSteps.includes(9) ? 'completed' : 
-              gameState.currentStep >= 9 ? 'available' : 'locked',
+      status: isModuleCompleted(9) ? 'completed' : 
+              isModuleAvailable(9) ? 'available' : 'locked',
       color: 'warning' as const,
       bgGradient: 'from-warning/10 to-warning/5'
     },
@@ -146,8 +150,8 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
       icon: <Users className="w-8 h-8" />,
       points: 100,
       estimatedTime: "5 min",
-      status: gameState.completedSteps.includes(10) ? 'completed' : 
-              gameState.currentStep >= 10 ? 'available' : 'locked',
+      status: isModuleCompleted(10) ? 'completed' : 
+              isModuleAvailable(10) ? 'available' : 'locked',
       color: 'success' as const,
       bgGradient: 'from-success/10 to-success/5'
     }
@@ -157,12 +161,6 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
     const module = modules.find(m => m.id === moduleId);
     if (module?.status === 'available') {
       setSelectedModule(moduleId);
-      // Aquí iría la navegación al módulo específico
-      // Por ahora simulamos completar el módulo
-      setTimeout(() => {
-        completeStep(moduleId, module.points);
-        setSelectedModule(null);
-      }, 2000);
     } else if (module?.status === 'locked') {
       setShowUpgrade(true);
     }
@@ -177,6 +175,20 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
     const progress = getProgressPercentage();
     return progress >= 40 && progress < 90 && !gameState.badges.includes('pro-access');
   };
+
+  // Renderizar módulos específicos
+  if (selectedModule === 2) {
+    return <WaterModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+  }
+  if (selectedModule === 3) {
+    return <FoodModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+  }
+  if (selectedModule === 4) {
+    return <EnergyModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+  }
+  if (selectedModule === 5) {
+    return <SavingsModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5">
