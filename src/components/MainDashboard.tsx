@@ -8,6 +8,9 @@ import { WaterModule } from "./WaterModule";
 import { FoodModule } from "./FoodModule";
 import { EnergyModule } from "./EnergyModule";
 import { SavingsModule } from "./SavingsModule";
+import { CrisisSimulator } from "./CrisisSimulator";
+import { FinalChallenge } from "./FinalChallenge";
+import { FinalResults } from "./FinalResults";
 import { 
   Droplets, 
   Utensils, 
@@ -85,76 +88,40 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
     },
     {
       id: 5,
-      title: "Control Climático",
-      description: "Calor, frío y ventilación",
-      icon: <Thermometer className="w-8 h-8" />,
+      title: "Misiones de Ahorro",
+      description: "Optimización de recursos",
+      icon: <Target className="w-8 h-8" />,
       points: 120,
       estimatedTime: "3 min",
       status: isModuleCompleted(5) ? 'completed' : 
               isModuleAvailable(5) ? 'available' : 'locked',
-      color: 'secondary' as const,
-      bgGradient: 'from-secondary/10 to-secondary/5'
+      color: 'success' as const,
+      bgGradient: 'from-success/10 to-success/5'
     },
     {
       id: 6,
-      title: "Misiones de Ahorro",
-      description: "Optimización de recursos",
-      icon: <Target className="w-8 h-8" />,
+      title: "Simulador de Crisis",
+      description: "Escenarios reales de emergencia",
+      icon: <AlertTriangle className="w-8 h-8" />,
       points: 200,
       estimatedTime: "6 min",
       status: isModuleCompleted(6) ? 'completed' : 
               isModuleAvailable(6) ? 'available' : 'locked',
-      color: 'success' as const,
-      bgGradient: 'from-success/10 to-success/5'
-    },
-    {
-      id: 7,
-      title: "Planificación de Reservas",
-      description: "Inventario rotativo inteligente",
-      icon: <ShoppingCart className="w-8 h-8" />,
-      points: 150,
-      estimatedTime: "5 min",
-      status: isModuleCompleted(7) ? 'completed' : 
-              isModuleAvailable(7) ? 'available' : 'locked',
-      color: 'primary' as const,
-      bgGradient: 'from-primary/10 to-primary/5'
-    },
-    {
-      id: 8,
-      title: "Simulador de Crisis",
-      description: "Escenarios reales de emergencia",
-      icon: <AlertTriangle className="w-8 h-8" />,
-      points: 250,
-      estimatedTime: "8 min",
-      status: isModuleCompleted(8) ? 'completed' : 
-              isModuleAvailable(8) ? 'available' : 'locked',
       color: 'destructive' as const,
       bgGradient: 'from-destructive/10 to-destructive/5'
     },
     {
-      id: 9,
-      title: "Test Final",
+      id: 7,
+      title: "Desafío Final",
       description: "Evaluación completa de preparación",
       icon: <Trophy className="w-8 h-8" />,
-      points: 200,
-      estimatedTime: "10 min",
-      status: isModuleCompleted(9) ? 'completed' : 
-              isModuleAvailable(9) ? 'available' : 'locked',
+      points: 150,
+      estimatedTime: "5 min",
+      status: isModuleCompleted(7) ? 'completed' : 
+              isModuleAvailable(7) ? 'available' : 'locked',
       color: 'warning' as const,
       bgGradient: 'from-warning/10 to-warning/5'
     },
-    {
-      id: 10,
-      title: "Comunidad Autónoma",
-      description: "Ranking y desafíos sociales",
-      icon: <Users className="w-8 h-8" />,
-      points: 100,
-      estimatedTime: "5 min",
-      status: isModuleCompleted(10) ? 'completed' : 
-              isModuleAvailable(10) ? 'available' : 'locked',
-      color: 'success' as const,
-      bgGradient: 'from-success/10 to-success/5'
-    }
   ];
 
   const handleModuleSelect = (moduleId: number) => {
@@ -176,22 +143,38 @@ export const MainDashboard = ({ userName, userEmail }: MainDashboardProps) => {
     return progress >= 40 && progress < 90 && !gameState.badges.includes('pro-access');
   };
 
+  const avanzarEtapa = (numeroEtapa: number) => {
+    setSelectedModule(numeroEtapa);
+  };
+
   // Renderizar módulos específicos
   if (selectedModule === 2) {
-    return <WaterModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+    return <WaterModule onComplete={() => avanzarEtapa(3)} onBack={() => setSelectedModule(null)} />;
   }
   if (selectedModule === 3) {
-    return <FoodModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+    return <FoodModule onComplete={() => avanzarEtapa(4)} onBack={() => setSelectedModule(null)} />;
   }
   if (selectedModule === 4) {
-    return <EnergyModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+    return <EnergyModule onComplete={() => avanzarEtapa(5)} onBack={() => setSelectedModule(null)} />;
   }
   if (selectedModule === 5) {
-    return <SavingsModule onComplete={() => setSelectedModule(null)} onBack={() => setSelectedModule(null)} />;
+    return <SavingsModule onComplete={() => avanzarEtapa(6)} onBack={() => setSelectedModule(null)} />;
+  }
+  if (selectedModule === 6) {
+    return <CrisisSimulator onComplete={() => avanzarEtapa(7)} onBack={() => setSelectedModule(null)} />;
+  }
+  if (selectedModule === 7) {
+    return <FinalChallenge onComplete={() => avanzarEtapa(999)} onBack={() => setSelectedModule(null)} />;
+  }
+  if (selectedModule === 999) {
+    return <FinalResults onBack={() => setSelectedModule(null)} onRestart={() => {
+      localStorage.removeItem("hogar-autonomo-state");
+      window.location.reload();
+    }} />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5">
+    <div className="min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/5 animate-fade-in">
       {/* Header */}
       <div className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-40">
         <div className="container mx-auto px-4 py-4">

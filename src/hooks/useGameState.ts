@@ -35,7 +35,7 @@ export interface GameState {
 
 const initialState: GameState = {
   currentStep: 0,
-  totalSteps: 10,
+  totalSteps: 7,
   puntosPreparacion: 0,
   puntosEconomia: 0,
   nivel: 1,
